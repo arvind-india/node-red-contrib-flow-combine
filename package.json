@@ -1,0 +1,33 @@
+{
+  "name": "node-red-contrib-flow-combine",
+  "version": "0.1.0",
+  "description": "Combine multiple flows into one waiting until a number (static or dynamic) of iterations are made.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redconnect-io/node-red-contrib-flow-combine.git"
+  },
+  "keywords": [
+    "node-red",
+    "combine",
+    "converge",
+    "array",
+    "async",
+    "flow",
+    "wait",
+    "redconnect"
+  ],
+  "node-red": {
+    "nodes": {
+      "Flow-Combine": "combine.js"
+    }
+  },
+  "author": "Maurizio Carboni <mcarboni@redant.com>",
+  "contributors": [
+    "Maurizio Carboni <mcarboni@redant.com>"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/redconnect-io/node-red-contrib-flow-combine/issues"
+  },
+  "homepage": "https://github.com/redconnect-io/node-red-contrib-flow-combine#readme"
+}
