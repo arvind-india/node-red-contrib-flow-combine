@@ -1,6 +1,7 @@
 Node-red Flow Combine
 ========================
 
+[![RedConnect Approved](https://img.shields.io/badge/RedConnect-Approved-brightgreen.svg?style=flat)](https://www.redconnect.io/addons/flow-combine/)
 
 Install
 -------
@@ -24,7 +25,8 @@ The node have the following properties :
 
 If this property is checked, then the number of iterations which *Combine End* waits is the length of the Array.
 
-**The Node doesn't split the Array in multiple messages, you need to use the Node Splitter for this**
+### Iterate over the Array
+Split the Array on multiple messages.
 
 
 ### Number of flows
@@ -41,3 +43,4 @@ The node have the following properties :
 ### Output processed data
 
 If this property is checked, then the node collects in an Array, data from each iteration and at the end provides that in the payload.
+If on the start node is enabled *Iterate over the Array* the elements of the result Array have the same order as in the input Array.

@@ -24,6 +24,11 @@
         <input type='checkbox' id='node-config-input-wait-array' style='display: inline-block; width: auto; vertical-align: top;'>
         <label for='node-config-input-wait-array' style='width: 70%;'>Wait an Array</label>
     </div>
+    <div class='form-row pg'>
+        <label>&nbsp;</label>
+        <input type='checkbox' id='node-config-input-iterate-array' style='display: inline-block; width: auto; vertical-align: top;'>
+        <label for='node-config-input-iterate-array' style='width: 70%;'>Iterate over the Array</label>
+    </div>
     <div class='form-row'>
         <label for='node-input-number' style='vertical-align: top;'>Number of flows</label>
         <input type='number' id='node-input-number'>
@@ -34,10 +39,11 @@
     <p>Combine multiple flows into one waiting until a number (static or dynamic) of iterations are made.</p>
     <p>This node define from which point the flow splits.</p>
     <p>The node have the following properties :</p>
-    <h3 id="wait-an-array">Wait an Array</h3>
+    <h3>Wait an Array</h3>
     <p>If this property is checked, then the number of iterations which <em>Combine End</em> waits is the length of the Array.</p>
-    <p><strong>The Node doesn’t split the Array in multiple messages, you need to use the Node Splitter for this</strong></p>
-    <h3 id="number-of-flows">Number of flows</h3>
+    <h3>Iterate over the Array</h3>
+    <p>Split the Array on multiple messages.</p>
+    <h3>Number of flows</h3>
     <p>If the other property is unchecked then the node <em>Combine End</em> will wait the number written in this property.</p>
 </script>
 
@@ -49,7 +55,8 @@
 			defaults: {
                 name: { value:'' },
                 number: {value:0, validate:RED.validators.number()},
-                waitArray: {value:true}
+                waitArray: {value:true},
+                iterateArray: {value:true}
 			},
 			inputs: 1,
 			outputs: 1,
@@ -62,10 +69,12 @@
 			},
 			oneditprepare: function() {
                 $('#node-config-input-wait-array').prop('checked',this.waitArray);
+                $('#node-config-input-iterate-array').prop('checked',this.iterateArray);
 				$('#node-input-name').focus();
             },
 			oneditsave: function() {
                 this.waitArray = $( '#node-config-input-wait-array' ).prop('checked') + 0;
+                this.iterateArray = $( '#node-config-input-iterate-array' ).prop('checked') + 0;
 			}
 		});
     })();
@@ -87,8 +96,9 @@
     <h2 id="combine-end">Combine End</h2>
     <p>Combine multiple flows into one waiting until a number (static or dynamic) of iterations are made.</p>
     <p>This node doesn’t produce any Output until all the expected iterations are done.</p>
-    <p>The node have the following properties :</p>    <h3 id="output-processed-data">Output processed data</h3>
+    <p>The node have the following properties :</p>    <h3>Output processed data</h3>
     <p>If this property is checked, then the node collects in an Array data from each iteration and at the end provides that in the payload.</p>
+    <p>If on the start node is enabled <em>Iterate over the Array</em> the elements of the result Array have the same order as in the input Array.</p>
 </script>
 
 <script type='text/javascript'>

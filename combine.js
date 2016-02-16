@@ -28,7 +28,13 @@
         if (!msg.__combineId) {
             msg.__combineId = [];
         }
-        msg.__combineId.unshift(id);
+        msg.__combineId.unshift({
+            id : id
+        });
+    }
+
+    function injectOrder(msg,i) {
+        msg.__combineId[0].order = i;
     }
 
     function CombineStartNode(n) {
@@ -37,6 +43,7 @@
         RED.nodes.createNode(this, n);
         this.number = parseInt(n.number,10);
         this.waitArray = n.waitArray;
+        this.iterateArray = n.iterateArray;
 
 
         this.on('input', function (msg) {
@@ -47,7 +54,16 @@
                     injectId(msg,id);
                     outputs[id] = [];
                     counters[id] = msg.payload.length;
-                    node.send(msg);
+                    if ( node.iterateArray ) {
+                        for ( var i=0;i<msg.payload.length;i++ ) {
+                            var msgCopy = RED.util.cloneMessage(msg);
+                            injectOrder(msgCopy,i);
+                            msgCopy.payload = msg.payload[i];
+                            node.send(msgCopy);
+                        }
+                    } else {
+                        node.send(msg);
+                    }
                 }
             } else {
                 id = global_id++;
@@ -66,9 +82,14 @@
 
         this.on('input', function (msg) {
             if (Array.isArray(msg.__combineId)) {
-                var id = msg.__combineId[0];
-                if (node.saveOutput) {
-                    outputs[id].push(msg.payload);
+                var id = msg.__combineId[0].id;
+                var order = msg.__combineId[0].order || false;
+                if ( node.saveOutput ) {
+                    if ( order ) {
+                        outputs[id][order] = msg.payload;
+                    } else {
+                        outputs[id].push(msg.payload);
+                    }
                 }
                 if (0 >= --counters[id]) {
                     if (node.saveOutput) {
