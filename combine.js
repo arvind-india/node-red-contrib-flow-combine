@@ -17,15 +17,16 @@
 
 
 
- module.exports = function(RED) {
-    'use strict';
+module.exports = function(RED) {
+    "use strict";
 
     var global_id = 0;
 
-    var outputs = {}, counters = {};
+    var outputs = {};
+    var counters = {};
 
     function injectId(msg,id) {
-        if (!msg.__combineId) {
+        if (msg.__combineId === undefined) {
             msg.__combineId = [];
         }
         msg.__combineId.unshift({
@@ -45,8 +46,7 @@
         this.waitArray = n.waitArray;
         this.iterateArray = n.iterateArray;
 
-
-        this.on('input', function (msg) {
+        this.on("input", function (msg) {
             var id;
             if (node.waitArray) {
                 if (Array.isArray(msg.payload)) {
@@ -54,8 +54,8 @@
                     injectId(msg,id);
                     outputs[id] = [];
                     counters[id] = msg.payload.length;
-                    if ( node.iterateArray ) {
-                        for ( var i=0;i<msg.payload.length;i++ ) {
+                    if (node.iterateArray) {
+                        for (var i=0;i<msg.payload.length;i++) {
                             var msgCopy = RED.util.cloneMessage(msg);
                             injectOrder(msgCopy,i);
                             msgCopy.payload = msg.payload[i];
@@ -80,13 +80,12 @@
         RED.nodes.createNode(this, n);
         this.saveOutput = n.saveOutput;
 
-        this.on('input', function (msg) {
+        this.on("input", function (msg) {
             if (Array.isArray(msg.__combineId)) {
                 var id = msg.__combineId[0].id;
-                var order = msg.__combineId[0].order || false;
-                if ( node.saveOutput ) {
-                    if ( order ) {
-                        outputs[id][order] = msg.payload;
+                if (node.saveOutput !== undefined) {
+                    if (msg.__combineId[0].order !== undefined) {
+                        outputs[id][msg.__combineId[0].order] = msg.payload;
                     } else {
                         outputs[id].push(msg.payload);
                     }
@@ -107,6 +106,6 @@
         });
     }
 
-    RED.nodes.registerType('Combine Start',CombineStartNode);
-    RED.nodes.registerType('Combine End',CombineEndNode);
+    RED.nodes.registerType("Combine Start",CombineStartNode);
+    RED.nodes.registerType("Combine End",CombineEndNode);
 };
